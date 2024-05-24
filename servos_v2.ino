@@ -1,8 +1,8 @@
 #include <Servo.h>
 
 //Camera dimensions
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 160
+#define SCREEN_HEIGHT 120
 
 //Borders of move
 #define MAX_NECK_ROT 16
@@ -20,10 +20,10 @@
 #define SERV_NECK_RIGHT 4
 
 //Section definitions
-#define LEFT_LIMIT 150
-#define RIGHT_LIMIT 550
-#define TOP_LIMIT 150
-#define BOTTOM_LIMIT 330
+#define LEFT_LIMIT 50
+#define RIGHT_LIMIT 110
+#define TOP_LIMIT 40
+#define BOTTOM_LIMIT 80
 
 int camAX = ((SCREEN_WIDTH/2)-10);
 int camBX = ((SCREEN_WIDTH/2)+10);
@@ -79,7 +79,9 @@ void loop() {
     
     //Wait to position
     while (Serial.available() == 0) {}     //wait for data available
-    String string = Serial.readStringUntil('\n');  //read until timeout
+    String string = Serial.readStringUntil('\n');  //read until timeout 
+    //\n is a last number in string
+    //Serial.println(string);
     string.trim();                        // remove any \r \n whitespace at the end of the String
     convertToVariablesINT(string);
 
@@ -99,10 +101,13 @@ void loop() {
     }    
 
     //Print debug informations
+    rotNeck(neck_rot_ang);
+    upDownNeck(neck_updown_ang);
     
-    /*Serial.println("Camera center:["+String(camCenX)+","+String(camCenY)+"]");
-    Serial.println("VectX: "+String(vectX) + " ,VectY: "+String(vectY));
-    Serial.println("Rotation angle: "+String(neck_rot_ang) + " ,UpDown angle: "+String(neck_updown_ang));*/
+    
+    //Serial.println("Camera center:["+String(camCenX)+","+String(camCenY)+"]");
+    //Serial.println("VectX: "+String(vectX) + " ,VectY: "+String(vectY));
+    //Serial.println("Rotation angle: "+String(neck_rot_ang) + " ,UpDown angle: "+String(neck_updown_ang));
     
   }         
 }
@@ -114,13 +119,20 @@ void convertToVariablesINT(String datapack){
   int comma2 = datapack.indexOf(',', comma1 + 1);
   int comma3 = datapack.indexOf(',', comma2 + 1);
   
-  camAX = datapack.substring(0, comma1).toInt();
+  camAX = datapack.substring(1, comma1).toInt();
   camAY = datapack.substring(comma1 + 1, comma2).toInt();
   camBX = datapack.substring(comma2 + 1, comma3).toInt();
   camBY = datapack.substring(comma3 + 1).toInt();
 
+  //Serial.println(camAX);
+  //Serial.println(camBX);
+  //Serial.println(camAY);
+  //Serial.println(camBY  );
+
   camCenX = int((camBX+camAX)/2);
   camCenY = int((camBY+camAY)/2);
+
+  //Serial.println(camCenY);
 }
 
 void setDefaultPose(){
@@ -139,8 +151,8 @@ float upDownNeck(float deg){
   float x_l=(((3*deg)+180)/2);
   float x_r=((deg-63.53)/(-0.7059));
 
-  Serial.println(x_l);
-  Serial.println(x_r);
+  //Serial.println(x_l);
+  //Serial.println(x_r);
 
   neck_left.write(x_l);
   neck_right.write(x_r);
