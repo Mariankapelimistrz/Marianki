@@ -3,9 +3,6 @@ import serial
 import cv2
 import face_recognition as fr
 import time
-from elevenlabs import play
-from elevenlabs.client import ElevenLabs
-uzytk=ElevenLabs(api_key="5543c6e672bb6efa92d039f1177c58ef")
 
 zbierz=cv2.VideoCapture(0)#kamera wbudowana
 dzieciaczek=serial.Serial('/dev/ttyUSB0',9600,timeout=1)#dorzucamy timeout żeby port nie pomyślał że jest zajęty
@@ -42,11 +39,9 @@ while True:
       marian.runAndWait()
       time.sleep(1)
       
-      marian.say("Mister?")
+      marian.say("Mister?,    capitan?")
       marian.runAndWait()
-      #time.sleep(1)
-      marian.say("capitan?")
-      marian.runAndWait()
+   
       time.sleep(1)
       
       marian.say("Recktor!")
@@ -54,7 +49,7 @@ while True:
       time.sleep(.5)
       marian.setProperty('rate',70)
       marian
-      marian.say("welcome in house oof ours")
+      marian.say("welcome in house of ours")
       marian.runAndWait()
       time.sleep(1)
       
@@ -69,20 +64,23 @@ while True:
       marian.say("cause you know you own this place and all, of course you allredy know that, it will be weird otherwise you know ? ")
       marian.runAndWait()
       time.sleep(.2)
+      dzieciaczek.write("recognition\n".encode('utf-8'))
       marian.setProperty('rate',170)
-      marian.say("and since everinthing here is yours property so do I, and i know that you can kick me out of this place nay time or  abandoned for ever so I try my best to gain your sympathy and stuff ")
+      marian.say("and since everinthing here is yours property so do I, and i know that you can kick me out of this place nay time or  abandoned for ever so I try my best to gain your sympathy     and stuff ")
       marian.runAndWait()
+      
       dzieciaczek.write('glop'.encode('utf-8'))
-      time.sleep(2)
+      time.sleep(15)
       dzieciaczek.write('isit'.encode('utf-8'))
-      time.sleep(.5)
+      
+      time.sleep(5)
       marian.setProperty('volume',1)
       marian.setProperty('rate',130)
  #     slw=uzytk.generate(text="myślę że poszło całkiem nie najgorzej",voice='Giovanni',model="eleven_multilingual_v2")
-  #    play(slw)
+  #    play(slw) nie wykorzystywane w żaden sposób
  
- #     marian.say("I think that went well")
-  #    marian.runAndWait()
+      marian.say("I think that went well")
+      marian.runAndWait()
       dzieciaczek.write('speak'.encode('utf-8'))
       exit()
     else:
